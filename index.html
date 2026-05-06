@@ -2,9 +2,9 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Form Media Sosial</title>
+  <title>Door Prize Griyo Dhahar Kaca5</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-  
+
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -12,27 +12,36 @@
       padding: 20px;
     }
 
-    .form-container {
+    .container {
+      max-width: 420px;
+      margin: auto;
+    }
+
+    .card {
       background: #fff;
       padding: 30px;
       border-radius: 16px;
-      max-width: 420px;
-      margin: auto;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(15px);}
+      to {opacity: 1; transform: translateY(0);}
     }
 
     h2 {
       text-align: center;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
 
     .form-group {
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     label {
       font-weight: 600;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       display: block;
     }
 
@@ -68,75 +77,124 @@
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255,102,0,0.4);
+    }
+
+    .success {
+      text-align: center;
+      display: none;
+    }
+
+    .success h3 {
+      color: green;
+    }
+
+    .btn-group {
+      margin-top: 15px;
+      background: #25D366;
+    }
+
+    .info {
+      font-size: 12px;
+      text-align: center;
+      margin-top: 10px;
+      color: #888;
     }
   </style>
 </head>
 <body>
 
-<div class="form-container">
-  <h2>Griyo Dhahar Kaca5 Door Prize</h2>
+<div class="container">
 
-  <form onsubmit="kirimWA(); return false;">
+  <!-- FORM -->
+  <div class="card" id="formBox">
+    <h2>🎁 Door Prize Griyo Dhahar Kaca5</h2>
 
-    <div class="form-group">
-      <label>Nama</label>
-      <div class="input-box">
-        <i class="fa fa-user"></i>
-        <input type="text" id="nama" placeholder="Masukkan nama" required>
+    <form onsubmit="kirimWA(); return false;">
+
+      <div class="form-group">
+        <label>Nama</label>
+        <div class="input-box">
+          <i class="fa fa-user"></i>
+          <input type="text" id="nama" required>
+        </div>
       </div>
-    </div>
 
-    <div class="form-group">
-      <label>No WhatsApp</label>
-      <div class="input-box">
-        <i class="fa fa-phone"></i>
-        <input type="text" id="wa" placeholder="08xxxxxxxxxx">
+      <div class="form-group">
+        <label>No WhatsApp</label>
+        <div class="input-box">
+          <i class="fa fa-phone"></i>
+          <input type="text" id="wa">
+        </div>
       </div>
-    </div>
 
-    <div class="form-group">
-      <label>Pilih Media Sosial</label>
-      <div class="input-box">
-        <i class="fa fa-share-alt"></i>
-        <select id="platform">
-          <option value="instagram">Instagram</option>
-          <option value="tiktok">TikTok</option>
-        </select>
+      <div class="form-group">
+        <label>Pilih Media Sosial</label>
+        <div class="input-box">
+          <i class="fa fa-share-alt"></i>
+          <select id="platform">
+            <option value="instagram">Instagram</option>
+            <option value="tiktok">TikTok</option>
+          </select>
+        </div>
       </div>
-    </div>
 
-    <div class="form-group">
-      <label>Username</label>
-      <div class="input-box">
-        <i class="fa fa-at"></i>
-        <input type="text" id="username" placeholder="contoh: griyodhahar_kaca5 (tanpa @)">
+      <div class="form-group">
+        <label>Username</label>
+        <div class="input-box">
+          <i class="fa fa-at"></i>
+          <input type="text" id="username" placeholder="contoh: griyodhahar_kaca5">
+        </div>
       </div>
+
+      <button type="submit" id="btnSubmit">Kirim Data</button>
+    </form>
+
+    <div class="info">
+      Data akan dikirim ke admin untuk verifikasi
     </div>
+  </div>
 
-    <button type="submit">Kirim ke WhatsApp</button>
+  <!-- SUCCESS -->
+  <div class="card success" id="successBox">
+    <h3>✅ Data berhasil dikirim!</h3>
+    <p>Silakan lanjut ke WhatsApp untuk konfirmasi, lalu gabung grup</p>
 
-  </form>
+    <button onclick="kirimWA()">Buka WhatsApp</button>
+
+    <a href="https://chat.whatsapp.com/LAgsZZI5o4dGZYTeHcOHsh" target="_blank">
+      <button class="btn-group">Gabung Grup WhatsApp</button>
+    </a>
+  </div>
+
 </div>
 
 <script>
 function kirimWA() {
-  let nama = document.getElementById("nama").value;
-  let wa = document.getElementById("wa").value;
+  let nama = document.getElementById("nama").value.trim();
+  let wa = document.getElementById("wa").value.trim();
   let platform = document.getElementById("platform").value;
-  let username = document.getElementById("username").value;
+  let username = document.getElementById("username").value.trim();
 
-  // HAPUS @ KALAU ADA
+  if (!nama || !username) {
+    alert("Nama & Username wajib diisi!");
+    return;
+  }
+
+  if (wa.startsWith("0")) {
+    wa = "62" + wa.substring(1);
+  }
+
   username = username.replace("@", "");
 
-  let link = "-";
-
-  if (username) {
-    if (platform === "instagram") {
-      link = "https://instagram.com/" + username;
-    } else if (platform === "tiktok") {
-      link = "https://www.tiktok.com/@" + username;
-    }
-  }
+  let link = platform === "instagram"
+    ? "https://instagram.com/" + username
+    : "https://www.tiktok.com/@" + username;
 
   let namaPlatform = platform === "instagram" ? "Instagram" : "TikTok";
 
@@ -147,8 +205,12 @@ ${namaPlatform}: ${link}`;
 
   let phone = "6282116677330";
 
-  let url = `https://wa.me/${phone}?text=${pesan}`;
-  window.open(url, "_blank");
+  // TAMPILKAN HALAMAN SUCCESS
+  document.getElementById("formBox").style.display = "none";
+  document.getElementById("successBox").style.display = "block";
+
+  // BUKA WA
+  window.open(`https://wa.me/${phone}?text=${pesan}`, "_blank");
 }
 </script>
 
