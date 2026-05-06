@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Form Media Sosial</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #f9f9f9, #eaeaea);
+      padding: 20px;
+    }
+
+    .form-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      max-width: 420px;
+      margin: auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .input-box {
+      display: flex;
+      align-items: center;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 8px 10px;
+      background: #fafafa;
+    }
+
+    .input-box i {
+      margin-right: 8px;
+      color: #999;
+    }
+
+    .input-box input,
+    .input-box select {
+      border: none;
+      outline: none;
+      width: 100%;
+      background: transparent;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #ff9900, #ff6600);
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="form-container">
+  <h2>Griyo Dhahar Kaca5 Door Prize</h2>
+
+  <form onsubmit="kirimWA(); return false;">
+
+    <div class="form-group">
+      <label>Nama</label>
+      <div class="input-box">
+        <i class="fa fa-user"></i>
+        <input type="text" id="nama" placeholder="Masukkan nama" required>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>No WhatsApp</label>
+      <div class="input-box">
+        <i class="fa fa-phone"></i>
+        <input type="text" id="wa" placeholder="08xxxxxxxxxx">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Pilih Media Sosial</label>
+      <div class="input-box">
+        <i class="fa fa-share-alt"></i>
+        <select id="platform">
+          <option value="instagram">Instagram</option>
+          <option value="tiktok">TikTok</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Username</label>
+      <div class="input-box">
+        <i class="fa fa-at"></i>
+        <input type="text" id="username" placeholder="contoh: griyodhahar_kaca5 (tanpa @)">
+      </div>
+    </div>
+
+    <button type="submit">Kirim ke WhatsApp</button>
+
+  </form>
+</div>
+
+<script>
+function kirimWA() {
+  let nama = document.getElementById("nama").value;
+  let wa = document.getElementById("wa").value;
+  let platform = document.getElementById("platform").value;
+  let username = document.getElementById("username").value;
+
+  // HAPUS @ KALAU ADA
+  username = username.replace("@", "");
+
+  let link = "-";
+
+  if (username) {
+    if (platform === "instagram") {
+      link = "https://instagram.com/" + username;
+    } else if (platform === "tiktok") {
+      link = "https://www.tiktok.com/@" + username;
+    }
+  }
+
+  let namaPlatform = platform === "instagram" ? "Instagram" : "TikTok";
+
+  let pesan = `Halo Griyo Dhahar Kaca5, saya sudah isi data:%0A
+Nama: ${nama}%0A
+WhatsApp: ${wa || '-'}%0A
+${namaPlatform}: ${link}`;
+
+  let phone = "6282116677330";
+
+  let url = `https://wa.me/${phone}?text=${pesan}`;
+  window.open(url, "_blank");
+}
+</script>
+
+</body>
+</html>
