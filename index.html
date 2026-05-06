@@ -22,12 +22,6 @@
       padding: 30px;
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      animation: fadeIn 0.5s ease;
-    }
-
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(15px);}
-      to {opacity: 1; transform: translateY(0);}
     }
 
     h2 {
@@ -50,8 +44,12 @@
       align-items: center;
       border: 1px solid #ddd;
       border-radius: 10px;
-      padding: 8px 10px;
+      padding: 8px;
       background: #fafafa;
+    }
+
+    .input-box.error {
+      border-color: red;
     }
 
     .input-box i {
@@ -59,12 +57,18 @@
       color: #999;
     }
 
-    .input-box input,
-    .input-box select {
+    input, select {
       border: none;
       outline: none;
       width: 100%;
       background: transparent;
+    }
+
+    .error-text {
+      color: red;
+      font-size: 12px;
+      margin-top: 4px;
+      display: none;
     }
 
     button {
@@ -74,29 +78,13 @@
       border-radius: 10px;
       background: linear-gradient(135deg, #ff9900, #ff6600);
       color: white;
-      font-size: 16px;
       font-weight: bold;
       cursor: pointer;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(255,102,0,0.4);
     }
 
     .success {
-      text-align: center;
       display: none;
-    }
-
-    .success h3 {
-      color: green;
-    }
-
-    .btn-group {
-      margin-top: 15px;
-      background: #25D366;
+      text-align: center;
     }
 
     .info {
@@ -117,24 +105,29 @@
 
     <form onsubmit="kirimWA(); return false;">
 
+      <!-- NAMA -->
       <div class="form-group">
         <label>Nama</label>
-        <div class="input-box">
+        <div class="input-box" id="boxNama">
           <i class="fa fa-user"></i>
-          <input type="text" id="nama" required>
+          <input type="text" id="nama">
         </div>
+        <div class="error-text" id="errNama">Nama hanya boleh huruf</div>
       </div>
 
+      <!-- WA -->
       <div class="form-group">
         <label>No WhatsApp</label>
-        <div class="input-box">
+        <div class="input-box" id="boxWA">
           <i class="fa fa-phone"></i>
-          <input type="text" id="wa">
+          <input type="text" id="wa" placeholder="08xxxxxxxxxx">
         </div>
+        <div class="error-text" id="errWA">Hanya angka diperbolehkan</div>
       </div>
 
+      <!-- PLATFORM -->
       <div class="form-group">
-        <label>Pilih Media Sosial</label>
+        <label>Media Sosial</label>
         <div class="input-box">
           <i class="fa fa-share-alt"></i>
           <select id="platform">
@@ -144,32 +137,26 @@
         </div>
       </div>
 
+      <!-- USERNAME -->
       <div class="form-group">
         <label>Username</label>
-        <div class="input-box">
+        <div class="input-box" id="boxUser">
           <i class="fa fa-at"></i>
-          <input type="text" id="username" placeholder="contoh: griyodhahar_kaca5">
+          <input type="text" id="username">
         </div>
+        <div class="error-text" id="errUser">Username wajib diisi</div>
       </div>
 
-      <button type="submit" id="btnSubmit">Kirim Data</button>
+      <button type="submit">Kirim Data</button>
     </form>
 
-    <div class="info">
-      Data akan dikirim ke admin untuk verifikasi
-    </div>
+    <div class="info">Data akan disimpan & dikirim ke admin</div>
   </div>
 
   <!-- SUCCESS -->
   <div class="card success" id="successBox">
     <h3>✅ Data berhasil dikirim!</h3>
-    <p>Silakan lanjut ke WhatsApp untuk konfirmasi, lalu gabung grup</p>
-
-    <button onclick="kirimWA()">Buka WhatsApp</button>
-
-    <a href="https://chat.whatsapp.com/LAgsZZI5o4dGZYTeHcOHsh" target="_blank">
-      <button class="btn-group">Gabung Grup WhatsApp</button>
-    </a>
+    <p>WhatsApp sudah dibuka 👍</p>
   </div>
 
 </div>
@@ -178,14 +165,39 @@
 function kirimWA() {
   let nama = document.getElementById("nama").value.trim();
   let wa = document.getElementById("wa").value.trim();
-  let platform = document.getElementById("platform").value;
   let username = document.getElementById("username").value.trim();
+  let platform = document.getElementById("platform").value;
 
-  if (!nama || !username) {
-    alert("Nama & Username wajib diisi!");
-    return;
+  // RESET ERROR
+  document.querySelectorAll(".input-box").forEach(e => e.classList.remove("error"));
+  document.querySelectorAll(".error-text").forEach(e => e.style.display = "none");
+
+  let valid = true;
+
+  // VALIDASI NAMA
+  if (!/^[a-zA-Z\s]+$/.test(nama)) {
+    document.getElementById("boxNama").classList.add("error");
+    document.getElementById("errNama").style.display = "block";
+    valid = false;
   }
 
+  // VALIDASI WA
+  if (wa && !/^[0-9]+$/.test(wa)) {
+    document.getElementById("boxWA").classList.add("error");
+    document.getElementById("errWA").style.display = "block";
+    valid = false;
+  }
+
+  // VALIDASI USERNAME
+  if (!username) {
+    document.getElementById("boxUser").classList.add("error");
+    document.getElementById("errUser").style.display = "block";
+    valid = false;
+  }
+
+  if (!valid) return;
+
+  // FORMAT WA
   if (wa.startsWith("0")) {
     wa = "62" + wa.substring(1);
   }
@@ -196,21 +208,38 @@ function kirimWA() {
     ? "https://instagram.com/" + username
     : "https://www.tiktok.com/@" + username;
 
-  let namaPlatform = platform === "instagram" ? "Instagram" : "TikTok";
+  let pesan = `Halo Admin 👋
+Saya sudah daftar door prize 🎁
 
-  let pesan = `Halo Griyo Dhahar Kaca5, saya sudah isi data:%0A
-Nama: ${nama}%0A
-WhatsApp: ${wa || '-'}%0A
-${namaPlatform}: ${link}`;
+Nama: ${nama}
+WhatsApp: ${wa || '-'}
+${platform}: ${link}
 
-  let phone = "6282116677330";
+👉 Join grup:
+https://chat.whatsapp.com/LAgsZZI5o4dGZYTeHcOHsh`;
 
-  // TAMPILKAN HALAMAN SUCCESS
+  let waLink = `https://wa.me/6282116677330?text=${encodeURIComponent(pesan)}`;
+
+  // SUCCESS UI
   document.getElementById("formBox").style.display = "none";
   document.getElementById("successBox").style.display = "block";
 
-  // BUKA WA
-  window.open(`https://wa.me/${phone}?text=${pesan}`, "_blank");
+  // WA (WAJIB DI ATAS)
+  window.open(waLink, "_blank");
+
+  // KIRIM KE SHEET
+  setTimeout(() => {
+    fetch("https://script.google.com/macros/s/AKfycbz3W4wW3c9a6lCdBeko6piMbKb6I_LKgwPbJ0SNzXLprhaLj1GuV9rbOoeD-elzz_L5/exec", {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: new URLSearchParams({
+        nama, wa, platform, username, link
+      })
+    });
+  }, 300);
 }
 </script>
 
